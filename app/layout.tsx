@@ -1,3 +1,4 @@
+// app/layout.tsx
 'use client';
 
 import "./globals.css";
@@ -72,8 +73,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               </span>
             </Link>
 
+            {/* Navegación corregida a /clases para que coincida con tu carpeta */}
             <nav className={`flex items-center gap-6 text-sm font-medium ${navTextColor}`}>
               <Link href="/" className={`${linkHoverColor} transition`}>Inicio</Link>
+              <Link href="/clases" className={`${linkHoverColor} transition`}>Clases</Link>
               <Link href="/gallery" className={`${linkHoverColor} transition`}>Galería</Link>
               <Link href="/contact" className={`${linkHoverColor} transition`}>Contáctenos</Link>
             </nav>
@@ -85,9 +88,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </div>
 
         <div>
+          {/* Barra de sponsors SIN líneas divisorias negras */}
           {isHome && (
-            <div className={`w-full py-2 border-t border-b overflow-hidden shadow-xs transition-colors duration-700 ${
-              theme === 'night' ? 'bg-[#161220] border-purple-900/30' : 'bg-[#f3ecf9] border-[#9079B5]/30'
+            <div className={`w-full py-2 overflow-hidden shadow-xs transition-colors duration-700 ${
+              theme === 'night' ? 'bg-[#161220]' : 'bg-[#f3ecf9]'
             }`}>
               <div className="relative w-full overflow-hidden flex">
                 <div className="animate-marquee-slow flex items-center gap-12 whitespace-nowrap">
