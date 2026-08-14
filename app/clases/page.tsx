@@ -86,30 +86,29 @@ export default function Home() {
           </button>
         </div>
 
-        {/* --- MODAL DINÁMICO, CHICO Y COMPACTO --- */}
+        {/* --- MODAL RESTRUCTURADO PARA CELULAR --- */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="bg-white text-slate-900 rounded-3xl p-5 sm:p-6 max-w-sm sm:max-w-md w-full shadow-2xl border border-slate-100 relative animate-in fade-in zoom-in duration-200">
+            <div className="bg-white text-slate-900 rounded-2xl p-5 max-w-[90vw] sm:max-w-sm w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-100 relative my-auto animate-in fade-in zoom-in duration-200">
               
-              {/* Botón de cierre visible y cómodo */}
+              {/* Cruz de cierre fija al scroll de la tarjeta */}
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-4 z-20 text-slate-400 hover:text-slate-700 font-bold cursor-pointer bg-slate-100 hover:bg-slate-200 w-8 h-8 rounded-full flex items-center justify-center transition"
+                className="sticky top-0 float-right -mr-1 -mt-1 z-30 text-slate-500 hover:text-slate-800 font-bold cursor-pointer bg-slate-100 hover:bg-slate-200 w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition text-sm"
               >
                 ✕
               </button>
 
-              {/* Cabecera compacta */}
-              <div className="mb-4 pr-8">
-                <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+              {/* Título compacto */}
+              <div className="mb-4 pr-6">
+                <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
                   Promoción Especial
                 </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-[#9079B5] mt-1.5">¡Anotate Hoy!</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Completá tus datos para coordinar por WhatsApp.</p>
+                <h3 className="text-xl font-bold text-[#9079B5] mt-1">¡Anotate Hoy!</h3>
               </div>
 
-              {/* Formulario compacto */}
-              <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-3">
+              {/* Formulario */}
+              <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-3 clear-both">
                 <div>
                   <label className="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-slate-500">Tu Nombre</label>
                   <input 
@@ -118,7 +117,7 @@ export default function Home() {
                     placeholder="Ej. María Pérez"
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
                   />
                 </div>
 
@@ -130,7 +129,7 @@ export default function Home() {
                     placeholder="Ej. 3511234567"
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
                   />
                 </div>
 
@@ -139,7 +138,7 @@ export default function Home() {
                   <select 
                     value={formData.plan}
                     onChange={(e) => setFormData({...formData, plan: e.target.value})}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
                   >
                     <option value="Clase de prueba gratis">Clase de prueba (¡Gratis!)</option>
                     <option value="Pack Mensual x2 por semana">Pack Mensual x2 por semana (Oferta)</option>
@@ -149,7 +148,7 @@ export default function Home() {
 
                 <button 
                   type="submit"
-                  className="mt-2 bg-[#3B9C84] hover:bg-[#31826d] text-white py-3 px-4 rounded-xl font-semibold transition shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                  className="mt-2 bg-[#3B9C84] hover:bg-[#31826d] text-white py-2.5 px-4 rounded-xl font-semibold transition shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>💬</span> <span>Confirmar y enviar</span>
                 </button>
