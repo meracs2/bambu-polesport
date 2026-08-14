@@ -1,4 +1,3 @@
-// app/clases/page.tsx
 'use client';
 
 import Image from 'next/image';
@@ -14,6 +13,15 @@ type Leaf = {
   delay: string;
   radius: string;
   rotation: string;
+};
+
+type ClassItem = {
+  id: string;
+  title: string;
+  level: string;
+  description: string;
+  image: string;
+  youtubeId: string;
 };
 
 export default function ClasesPage() {
@@ -48,9 +56,9 @@ export default function ClasesPage() {
       return 'day';
     }
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedClassType, setSelectedClassType] = useState('Clase de prueba gratis');
-  const [formData, setFormData] = useState({ name: '', phone: '', plan: 'Clase de prueba gratis' });
+
+  const [activeClass, setActiveClass] = useState<ClassItem | null>(null);
+  const [formData, setFormData] = useState({ name: '', phone: '' });
 
   useEffect(() => {
     const handleThemeChange = () => {
@@ -64,8 +72,6 @@ export default function ClasesPage() {
     return () => window.removeEventListener('theme-change', handleThemeChange);
   }, []);
 
-  // leaves generated via useMemo (deterministic pseudorandom) to avoid setState in effects
-
   const themeStyles = {
     day: 'bg-white text-slate-900',
     sunset: 'bg-[#FAF4EC] text-slate-900',
@@ -73,44 +79,85 @@ export default function ClasesPage() {
   };
 
   const cardThemeStyles = {
-    day: 'bg-white/90 border-slate-100',
-    sunset: 'bg-white/80 border-amber-100/60',
-    night: 'bg-[#261f36]/90 border-purple-900/30 text-white',
+    day: 'bg-white border-slate-200 hover:border-[#3B9C84]/60 hover:shadow-xl',
+    sunset: 'bg-white/95 border-amber-200/70 hover:border-[#3B9C84]/60 hover:shadow-xl',
+    night: 'bg-[#261f36] border-purple-900/40 text-white hover:border-[#3B9C84]/60 hover:shadow-xl',
   };
 
-  const classesList = [
+  const classesList: ClassItem[] = [
     {
+      id: "pole-sport",
       title: "Pole Sport",
       level: "Principiantes / Intermedios / Avanzados",
-      description: "Entrenamiento de fuerza, acrobacias en la barra, inversiones y transiciones técnicas combinando arte y deporte.",
-      image: "/bambu-pole-2.png"
+      description: "Entrenamiento de fuerza, trucos, figuras e inversiones en la barra combinando técnica deportiva y arte.",
+      image: "/bambu-pole-2.png",
+      youtubeId: "j85dgGee3mI"
     },
     {
-      title: "Pole Exotic & Coreo",
+      id: "pole-exotic",
+      title: "Pole Exotic",
+      level: "Adultos (+18) / Recom. Principiantes con base o Intermedios",
+      description: "Enfoque en la fluidez, musicalidad, baile con tacones (pleasers) y floorwork para potenciar tu seguridad y expresión.",
+      image: "/bambu-pole-3.png",
+      youtubeId: "LDQVYEFpmtU"
+    },
+    {
+      id: "flexibilidad",
+      title: "Flexibilidad",
+      level: "Sin experiencia previa",
+      description: "Elongación activa y pasiva, movilidad articular y acondicionamiento físico para prevenir lesiones y ganar rango.",
+      image: "/bambu-pole-4.png",
+      youtubeId: "v7SN-d4qXx0"
+    },
+    {
+      id: "acrotelas",
+      title: "Acrotelas (Niños y Adultos)",
       level: "Todos los niveles",
-      description: "Enfoque en la fluidez, expresión corporal, coreografías y baile con plataformas, potenciando la seguridad y sensualidad.",
-      image: "/bambu-pole-3.png"
+      description: "Acrobacia en tela suspendida. Fuerza, flexibilidad y figuras aéreas adaptadas por edades.",
+      image: "/bambu-pole-2.png",
+      youtubeId: "6BnKmWZPU8M"
     },
     {
-      title: "Flexibilidad & Acrobacia",
-      level: "Sin experiencia previa requerida",
-      description: "Clases orientadas a ganar rango de movimiento, elongación activa/pasiva y acondicionamiento físico general para cuidar tu cuerpo.",
-      image: "/bambu-pole-4.png"
+      id: "lyra",
+      title: "Lyra (Aro Aéreo)",
+      level: "Todos los niveles",
+      description: "Acondicionamiento físico, destreza y secuencias dinámicas sobre aro metálico suspendido.",
+      image: "/bambu-pole-3.png",
+      youtubeId: "uMvG8i6Nprc"
+    },
+    {
+      id: "acro-piso",
+      title: "Acro de Piso",
+      level: "Sin experiencia previa",
+      description: "Técnica gimnástica y acrobática en suelo: rodamientos, vertical, apoyos y coordinación física.",
+      image: "/bambu-pole-4.png",
+      youtubeId: "sR1Qr6Aq4oA"
+    },
+    {
+      id: "heels",
+      title: "Heels",
+      level: "Todos los niveles",
+      description: "Danza urbana y sensual sobre tacones. Trabajo de postura, actitud, ritmo y expresión corporal.",
+      image: "/bambu-pole-2.png",
+      youtubeId: "2vjPBrBU-TM"
+    },
+    {
+      id: "yoga",
+      title: "Yoga",
+      level: "Todos los niveles",
+      description: "Práctica integral para alinear cuerpo y mente mediante respiración, posturas (asanas) y relajación.",
+      image: "/bambu-pole-3.png",
+      youtubeId: "inpok4MKVLM"
     }
   ];
 
-  const handleOpenModal = (className: string) => {
-    setSelectedClassType(className);
-    setFormData(prev => ({ ...prev, plan: className }));
-    setIsModalOpen(true);
-  };
-
   const handleWhatsAppSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const phoneNumber = "TU_NUMERO_DE_TELEFONO"; // Reemplazá con el número real de WhatsApp de la dueña
-    const message = `Hola! Me quiero anotar a ${formData.plan}.%0A- Nombre: ${encodeURIComponent(formData.name)}%0A- Teléfono: ${encodeURIComponent(formData.phone)}`;
+    if (!activeClass) return;
+    const phoneNumber = "5493512110079";
+    const message = `Hola! Quisiera consultar/reservar para la clase de ${activeClass.title}.%0A- Nombre: ${encodeURIComponent(formData.name)}%0A- Teléfono: ${encodeURIComponent(formData.phone)}`;
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-    setIsModalOpen(false);
+    setActiveClass(null);
   };
 
   return (
@@ -147,137 +194,144 @@ export default function ClasesPage() {
       </div>
 
       {/* Contenido principal */}
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+          <span className="bg-[#3B9C84]/15 text-[#3B9C84] text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full">
             Nuestras Disciplinas
           </span>
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#9079B5] mt-3 mb-4">
-            Elegí tu clase y empezá a entrenar
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#7B5F9E] dark:text-[#B19BD3] mt-3 mb-4">
+            Elegí tu clase y mirá la muestra
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
-            Contamos con opciones adaptadas a todos los niveles, desde cero hasta avanzado. Unete a nuestro espacio y potencia tu fuerza y confianza.
+          <p 
+            style={{ color: '#334155' }} 
+            className="text-sm sm:text-base font-semibold leading-relaxed"
+          >
+            Hacé clic en cualquier disciplina para ver el video de la clase en vivo y consultar tus horarios por WhatsApp.
           </p>
         </div>
 
-        {/* Grilla de Clases */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {classesList.map((item, index) => (
+        {/* Grilla de 8 Clases Interactivas */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {classesList.map((item) => (
             <div 
-              key={index} 
-              className={`rounded-3xl p-6 shadow-sm border flex flex-col justify-between transition-all duration-300 hover:shadow-md ${cardThemeStyles[theme]}`}
+              key={item.id} 
+              onClick={() => setActiveClass(item)}
+              className={`group rounded-3xl p-6 shadow-md border flex flex-col justify-between transition-all duration-300 transform md:hover:-translate-y-2 cursor-pointer active:scale-95 ${cardThemeStyles[theme]}`}
             >
               <div>
-                <div className="relative w-full h-48 mb-6 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center">
+                <div className="relative w-full h-44 mb-4 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center">
                   <Image 
                     src={item.image} 
                     alt={item.title} 
                     fill 
-                    className="object-contain p-2" 
+                    className="object-contain p-2 transition-transform duration-300 group-hover:scale-105" 
                   />
+                  
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2 text-white font-semibold text-xs backdrop-blur-[1px]">
+                    <span className="w-8 h-8 rounded-full bg-[#3B9C84] flex items-center justify-center shadow-lg text-sm">
+                      ▶
+                    </span>
+                    <span>Ver Demo</span>
+                  </div>
                 </div>
-                <span className="text-xs font-semibold text-[#3B9C84] uppercase tracking-wider">
+
+                {/* Badge de Nivel */}
+                <span className="text-[11px] font-extrabold text-[#3B9C84] uppercase tracking-wider block mb-1.5">
                   {item.level}
                 </span>
-                <h3 className="text-xl font-bold text-[#9079B5] mt-1 mb-2">
+
+                {/* Título de la Clase */}
+                <h3 className="text-lg font-bold text-[#7B5F9E] dark:text-[#B19BD3] mb-2 group-hover:text-[#3B9C84] transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+
+                {/* Descripción */}
+                <p 
+                  style={{ color: '#334155' }} 
+                  className="text-xs font-semibold leading-relaxed mb-6 line-clamp-3"
+                >
                   {item.description}
                 </p>
               </div>
 
-              <button
-                onClick={() => handleOpenModal(item.title)}
-                className="w-full bg-[#3B9C84] hover:bg-[#31826d] text-white py-3 rounded-xl font-semibold text-sm transition shadow-sm cursor-pointer"
-              >
-                Reservar / Consultar
-              </button>
+              {/* Botón Reservar / Consultar */}
+              <div className="w-full bg-[#3B9C84] group-hover:bg-[#2B7A66] text-white py-3 rounded-xl font-bold text-xs transition shadow-sm flex items-center justify-center gap-2">
+                <span>Reservar / Consultar</span>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* MODAL DE INSCRIPCIÓN */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white text-slate-900 rounded-xl sm:rounded-3xl overflow-hidden w-full max-w-105 mx-4 sm:mx-auto max-h-[90vh] shadow-2xl border border-slate-100 relative flex flex-col md:flex-row animate-in fade-in zoom-in duration-200">
+      {/* MODAL CON REPRODUCTOR YOUTUBE */}
+      {activeClass && (
+        <div 
+          onClick={() => setActiveClass(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-200"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()} 
+            className="bg-white text-slate-900 rounded-2xl sm:rounded-3xl overflow-hidden w-full max-w-2xl mx-auto shadow-2xl border border-slate-100 relative flex flex-col max-h-[90vh]"
+          >
             
+            {/* Botón Cerrar */}
             <button 
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 z-10 text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center"
+              onClick={() => setActiveClass(null)}
+              className="absolute top-3 right-3 z-20 text-slate-700 hover:text-slate-950 bg-white/90 hover:bg-white w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all cursor-pointer font-bold text-sm"
             >
               ✕
             </button>
 
-            {/* Izquierda: Logo Redondo y Promoción */}
-            <div className="bg-[#FAF4EC] p-4 sm:p-8 md:w-1/2 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200/60">
-              <div>
-                <div className="flex flex-col items-start gap-4 mb-4">
-                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-white shadow-md bg-white flex items-center justify-center">
-                    <Image src="/bambu-logo.jpg" alt="Bambu Logo" fill className="object-cover" />
-                  </div>
-                  <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                    Reserva de Clase
-                  </span>
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-bold text-[#9079B5] mb-2">¡Anotate Hoy!</h3>
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  Estás a un paso de sumarte a <span className="font-semibold text-slate-800">{selectedClassType}</span>. Completá tus datos para coordinar con la dueña por WhatsApp.
-                </p>
-              </div>
-              <div className="mt-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-200/40">
-                <p className="text-xs sm:text-sm font-semibold text-[#3B9C84]">Beneficio exclusivo</p>
-                <p className="text-xs sm:text-sm text-slate-500 mt-1">Matrícula bonificada por anotarte desde la web hoy mismo.</p>
-              </div>
+            {/* IFRAME YOUTUBE */}
+            <div className="relative w-full bg-black aspect-video flex items-center justify-center overflow-hidden">
+              <iframe
+                src={`https://www.youtube.com/embed/${activeClass.youtubeId}?autoplay=1&muted=1&controls=1&rel=0&enablejsapi=1`}
+                title={activeClass.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full border-0"
+              />
             </div>
 
-            {/* Derecha: Formulario */}
-            <div className="bg-white p-4 sm:p-8 md:w-1/2 flex flex-col justify-center overflow-y-auto" style={{ maxHeight: '78vh' }}>
-              <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-4">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Tu Nombre</label>
-                  <input 
-                    type="text" 
-                    required
-                    placeholder="Ej. María Pérez"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
-                  />
-                </div>
+            {/* CONTENIDO Y FORMULARIO DEL MODAL */}
+            <div className="p-6 overflow-y-auto bg-white">
+              <div className="mb-4">
+                <span className="bg-[#3B9C84]/15 text-[#3B9C84] text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                  {activeClass.level}
+                </span>
+                <h3 className="text-2xl font-bold text-[#7B5F9E] mt-2">{activeClass.title}</h3>
+                
+                {/* Descripción dentro del Modal */}
+                <p 
+                  style={{ color: '#334155' }} 
+                  className="text-xs sm:text-sm font-semibold mt-1.5 leading-relaxed"
+                >
+                  {activeClass.description}
+                </p>
+              </div>
 
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Teléfono / WhatsApp</label>
-                  <input 
-                    type="tel" 
-                    required
-                    placeholder="Ej. 3511234567"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Clase Seleccionada</label>
-                  <select 
-                    value={formData.plan}
-                    onChange={(e) => setFormData({...formData, plan: e.target.value})}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
-                  >
-                    <option value="Clase de prueba gratis">Clase de prueba (¡Gratis!)</option>
-                    <option value="Pole Sport">Pole Sport</option>
-                    <option value="Pole Exotic & Coreo">Pole Exotic & Coreo</option>
-                    <option value="Flexibilidad & Acrobacia">Flexibilidad & Acrobacia</option>
-                  </select>
-                </div>
-
+              <form onSubmit={handleWhatsAppSubmit} className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-slate-200">
+                <input 
+                  type="text" 
+                  required
+                  placeholder="Tu Nombre"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 font-medium text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84] placeholder:text-slate-400"
+                />
+                <input 
+                  type="tel" 
+                  required
+                  placeholder="Tu WhatsApp"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 font-medium text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84] placeholder:text-slate-400"
+                />
                 <button 
                   type="submit"
-                  className="mt-3 bg-[#3B9C84] hover:bg-[#31826d] text-white py-3.5 px-4 rounded-xl font-semibold transition shadow-md text-sm sm:text-base flex items-center justify-center gap-2.5 cursor-pointer"
+                  className="bg-[#3B9C84] hover:bg-[#2B7A66] text-white py-2.5 px-5 rounded-xl font-bold text-xs sm:text-sm transition shadow-md whitespace-nowrap cursor-pointer flex items-center justify-center gap-2"
                 >
-                  <span>💬</span> <span>Confirmar y enviar</span>
+                  <span>💬</span> <span>Consultar Horarios</span>
                 </button>
               </form>
             </div>
