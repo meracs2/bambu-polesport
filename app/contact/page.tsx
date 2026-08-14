@@ -1,3 +1,4 @@
+// app/contact/page.tsx
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -23,6 +24,13 @@ export default function Contact() {
     } catch {
       return 'day';
     }
+  });
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
   });
 
   const leaves = useMemo<Leaf[]>(() => {
@@ -59,6 +67,17 @@ export default function Contact() {
     return () => window.removeEventListener('theme-change', handleThemeChange);
   }, []);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // WhatsApp Oficial Bambú Pole Studio
+    const studioPhone = "5493512110079";
+
+    const textMessage = `Hola Bambú Pole Studio! Soy ${encodeURIComponent(formData.name)}.%0A- Correo: ${encodeURIComponent(formData.email)}%0A- Teléfono: ${encodeURIComponent(formData.phone)}%0A- Mensaje: ${encodeURIComponent(formData.message)}`;
+
+    window.open(`https://wa.me/${studioPhone}?text=${textMessage}`, '_blank');
+  };
+
   const themeStyles = {
     day: 'bg-white text-slate-900',
     sunset: 'bg-[#FAF4EC] text-slate-900',
@@ -81,7 +100,7 @@ export default function Contact() {
   const subtitleColor = theme === 'night' ? 'text-slate-300' : 'text-slate-500';
 
   return (
-    <div className={`relative min-h-[calc(100vh-140px)] flex flex-col justify-center overflow-hidden py-12 px-6 transition-colors duration-700 ${themeStyles[theme]}`}>
+    <div className={`relative min-h-[calc(100vh-140px)] flex flex-col justify-center overflow-hidden py-12 px-4 sm:px-8 lg:px-16 transition-colors duration-700 ${themeStyles[theme]}`}>
       
       <style jsx global>{`
         @keyframes fallAndRotate {
@@ -102,6 +121,7 @@ export default function Contact() {
         }
       `}</style>
 
+      {/* ANIMACIÓN DE HOJAS */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         {leaves.map((leaf) => (
           <div
@@ -122,48 +142,134 @@ export default function Contact() {
         ))}
       </div>
 
-      <div className="relative max-w-lg mx-auto w-full z-10 my-auto">
-        <h2 className={`text-3xl font-bold mb-2 text-center font-sans ${titleColor}`}>
-          Contáctenos
-        </h2>
-        <p className={`text-center mb-8 font-medium ${subtitleColor}`}>
-          Dejanos tu mensaje y te responderemos a la brevedad.
-        </p>
+      {/* CONTENEDOR PRINCIPAL DOS COLUMNAS */}
+      <div className="relative max-w-6xl mx-auto w-full z-10 my-auto">
+        
+        <div className="text-center mb-8">
+          <h2 className={`text-3xl sm:text-4xl font-bold mb-2 font-sans ${titleColor}`}>
+            Contáctenos
+          </h2>
+          <p className={`font-medium text-sm sm:text-base ${subtitleColor}`}>
+            Dejanos tu mensaje y te responderemos a la brevedad.
+          </p>
+        </div>
 
-        <form className={`border p-8 rounded-3xl space-y-5 shadow-sm transition-all duration-700 ${formBoxStyles[theme]}`}>
-          <div>
-            <label className={`block text-sm font-semibold mb-1 ${theme === 'night' ? 'text-slate-200' : 'text-slate-700'}`}>Nombre</label>
-            <input 
-              type="text" 
-              placeholder="Tu nombre" 
-              className={`w-full border rounded-xl p-3 outline-none focus:border-[#9079B5] transition ${inputStyles[theme]}`} 
-            />
-          </div>
-
-          <div>
-            <label className={`block text-sm font-semibold mb-1 ${theme === 'night' ? 'text-slate-200' : 'text-slate-700'}`}>Correo electrónico</label>
-            <input 
-              type="email" 
-              placeholder="tucorreo@email.com" 
-              className={`w-full border rounded-xl p-3 outline-none focus:border-[#9079B5] transition ${inputStyles[theme]}`} 
-            />
-          </div>
-
-          <div>
-            <label className={`block text-sm font-semibold mb-1 ${theme === 'night' ? 'text-slate-200' : 'text-slate-700'}`}>Mensaje</label>
-            <textarea 
-              placeholder="¿En qué te podemos ayudar?" 
-              className={`w-full border rounded-xl p-3 h-32 outline-none focus:border-[#9079B5] transition resize-none ${inputStyles[theme]}`}
-            ></textarea>
-          </div>
-
-          <button 
-            type="submit" 
-            className="w-full bg-[#9079B5] hover:bg-[#7b639c] py-3.5 rounded-xl font-bold text-white transition shadow-md shadow-[#9079B5]/20 cursor-pointer"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          
+          {/* COLUMNA IZQUIERDA: FORMULARIO DE CONTACTO */}
+          <form 
+            onSubmit={handleSubmit}
+            className={`border p-6 sm:p-8 rounded-3xl space-y-4 shadow-sm transition-all duration-700 flex flex-col justify-between ${formBoxStyles[theme]}`}
           >
-            Enviar mensaje
-          </button>
-        </form>
+            <div>
+              <label className={`block text-xs sm:text-sm font-semibold mb-1 ${theme === 'night' ? 'text-slate-200' : 'text-slate-700'}`}>
+                Nombre completo
+              </label>
+              <input 
+                type="text" 
+                required
+                placeholder="Tu nombre" 
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className={`w-full border rounded-xl p-3 text-sm outline-none focus:border-[#9079B5] transition ${inputStyles[theme]}`} 
+              />
+            </div>
+
+            <div>
+              <label className={`block text-xs sm:text-sm font-semibold mb-1 ${theme === 'night' ? 'text-slate-200' : 'text-slate-700'}`}>
+                Correo electrónico
+              </label>
+              <input 
+                type="email" 
+                required
+                placeholder="tucorreo@email.com" 
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className={`w-full border rounded-xl p-3 text-sm outline-none focus:border-[#9079B5] transition ${inputStyles[theme]}`} 
+              />
+            </div>
+
+            <div>
+              <label className={`block text-xs sm:text-sm font-semibold mb-1 ${theme === 'night' ? 'text-slate-200' : 'text-slate-700'}`}>
+                Teléfono / WhatsApp
+              </label>
+              <input 
+                type="tel" 
+                required
+                placeholder="Ej. 3511234567" 
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className={`w-full border rounded-xl p-3 text-sm outline-none focus:border-[#9079B5] transition ${inputStyles[theme]}`} 
+              />
+            </div>
+
+            <div>
+              <label className={`block text-xs sm:text-sm font-semibold mb-1 ${theme === 'night' ? 'text-slate-200' : 'text-slate-700'}`}>
+                Mensaje
+              </label>
+              <textarea 
+                required
+                placeholder="¿En qué te podemos ayudar?" 
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                className={`w-full border rounded-xl p-3 h-28 text-sm outline-none focus:border-[#9079B5] transition resize-none ${inputStyles[theme]}`}
+              ></textarea>
+            </div>
+
+            <button 
+              type="submit" 
+              className="w-full bg-[#9079B5] hover:bg-[#7b639c] py-3.5 rounded-xl font-bold text-white transition shadow-md shadow-[#9079B5]/20 cursor-pointer text-sm sm:text-base flex items-center justify-center gap-2"
+            >
+              <span>💬</span> <span>Enviar mensaje a WhatsApp</span>
+            </button>
+          </form>
+
+          {/* COLUMNA DERECHA: UBICACIÓN, HORARIOS Y GOOGLE MAPS */}
+          <div className={`border p-6 sm:p-8 rounded-3xl shadow-sm transition-all duration-700 flex flex-col justify-between gap-6 ${formBoxStyles[theme]}`}>
+            
+            {/* DIRECCIÓN Y HORARIOS */}
+            <div className="space-y-4 text-left">
+              <div>
+                <h3 className={`text-base sm:text-lg font-bold flex items-center gap-2 ${titleColor}`}>
+                  📍 Ubicación de la Academia
+                </h3>
+                <p className={`text-xs sm:text-sm mt-1 ${subtitleColor}`}>
+                  Ovidio Lagos 10, X5004ACB Córdoba, Argentina
+                </p>
+                <p className={`text-xs mt-0.5 ${subtitleColor}`}>
+                  📞 0351 15-211-0079
+                </p>
+              </div>
+
+              <div>
+                <h3 className={`text-base sm:text-lg font-bold flex items-center gap-2 ${titleColor}`}>
+                  ⏰ Horarios de Atención
+                </h3>
+                <ul className={`text-xs sm:text-sm mt-1 space-y-1 ${subtitleColor}`}>
+                  <li><strong className={theme === 'night' ? 'text-white' : 'text-slate-700'}>Lunes a Viernes:</strong> 09:00 a 13:00 hs — 16:00 a 21:00 hs</li>
+                  <li><strong className={theme === 'night' ? 'text-white' : 'text-slate-700'}>Sábados:</strong> 10:30 a 13:00 hs — 17:00 a 19:30 hs</li>
+                  <li><strong className={theme === 'night' ? 'text-white' : 'text-slate-700'}>Domingos:</strong> Cerrado</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* MAPA GOOGLE MAPS EN OVIDIO LAGOS 10 */}
+            <div className="w-full h-56 sm:h-64 rounded-2xl overflow-hidden shadow-inner border border-slate-200/40">
+              <iframe
+                title="Ubicación Bambu Pole Studio"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3405.011831417578!2d-64.18879!3d-31.416667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9432a281691a5477%3A0xb36a3f3fb58c14a2!2sOvidio%20Lagos%2010%2C%20X5004ACB%20C%C3%B3rdoba!5e0!3m2!1ses!2sar!4v1700000000000!5m2!1ses!2sar"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={false}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+
+          </div>
+
+        </div>
       </div>
     </div>
   );
