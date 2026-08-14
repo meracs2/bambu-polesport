@@ -88,8 +88,8 @@ export default function Home() {
 
         {/* --- MODAL AJUSTADO (PEQUEÑO Y COMPACTO POR DEFECTO) --- */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="bg-white text-slate-900 rounded-3xl p-5 max-w-[90vw] sm:max-w-sm w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-100 relative my-auto animate-in fade-in zoom-in duration-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-6">
+            <div className="bg-white text-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-5 w-full max-w-[420px] mx-4 sm:mx-0 max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-100 relative my-auto animate-in fade-in zoom-in duration-200">
               
               {/* Cruz de cierre */}
               <button 
