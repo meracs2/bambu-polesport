@@ -86,15 +86,15 @@ export default function Home() {
           </button>
         </div>
 
-        {/* --- MODAL RESTRUCTURADO PARA CELULAR --- */}
+        {/* --- MODAL AJUSTADO (PEQUEÑO Y COMPACTO POR DEFECTO) --- */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="bg-white text-slate-900 rounded-2xl p-5 max-w-[90vw] sm:max-w-sm w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-100 relative my-auto animate-in fade-in zoom-in duration-200">
+            <div className="bg-white text-slate-900 rounded-3xl p-5 max-w-[90vw] sm:max-w-sm w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-100 relative my-auto animate-in fade-in zoom-in duration-200">
               
-              {/* Cruz de cierre fija al scroll de la tarjeta */}
+              {/* Cruz de cierre */}
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="sticky top-0 float-right -mr-1 -mt-1 z-30 text-slate-500 hover:text-slate-800 font-bold cursor-pointer bg-slate-100 hover:bg-slate-200 w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition text-sm"
+                className="absolute top-3 right-3 z-30 text-slate-500 hover:text-slate-800 font-bold cursor-pointer bg-slate-100 hover:bg-slate-200 w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition text-sm"
               >
                 ✕
               </button>
@@ -108,7 +108,7 @@ export default function Home() {
               </div>
 
               {/* Formulario */}
-              <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-3 clear-both">
+              <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-3">
                 <div>
                   <label className="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-slate-500">Tu Nombre</label>
                   <input 
