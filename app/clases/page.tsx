@@ -73,7 +73,7 @@ export default function Home() {
 
   return (
     <div className={`transition-colors duration-700 ${themeStyles[theme]}`}>
-      {/* HERO: Dibujo gigante centrado y armonizado */}
+      {/* HERO */}
       <main className="relative min-h-[70vh] sm:min-h-[75vh] flex flex-col justify-center items-center px-6 sm:px-12 lg:px-24 py-12 overflow-hidden">
         
         {/* --- BOTÓN LLAMADOR --- */}
@@ -86,12 +86,12 @@ export default function Home() {
           </button>
         </div>
 
-        {/* --- MODAL AJUSTADO CON SCROLL Y ALTURA CONTROLADA --- */}
+        {/* --- MODAL OPTIMIZADO PARA CELULAR (COMPACTO Y FIJO) --- */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4">
-            <div className="bg-white text-slate-900 rounded-2xl sm:rounded-3xl overflow-hidden max-w-lg md:max-w-2xl w-full max-h-[88vh] shadow-2xl border border-slate-100 relative flex flex-col md:flex-row animate-in fade-in zoom-in duration-200 my-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="bg-white text-slate-900 rounded-3xl overflow-hidden max-w-md md:max-w-2xl w-full shadow-2xl border border-slate-100 relative flex flex-col md:flex-row animate-in fade-in zoom-in duration-200">
               
-              {/* Botón de cierre fijo siempre visible */}
+              {/* Botón de cierre siempre accesible arriba a la derecha */}
               <button 
                 onClick={() => setIsModalOpen(false)}
                 className="absolute top-3 right-3 z-20 text-slate-500 hover:text-slate-800 font-bold cursor-pointer bg-slate-100 hover:bg-slate-200 w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition"
@@ -99,81 +99,82 @@ export default function Home() {
                 ✕
               </button>
 
-              {/* Contenedor con scroll interno para que nunca quede fuera de pantalla */}
-              <div className="w-full overflow-y-auto max-h-[88vh] flex flex-col md:flex-row">
-                
-                {/* Lado izquierdo: Logo y Promoción */}
-                <div className="bg-[#FAF4EC] p-4 sm:p-6 md:w-1/2 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200/60">
+              {/* En celulares ocultamos el bloque lateral largo y mostramos solo el formulario compacto. En PC se mantiene en 2 columnas */}
+              <div className="hidden md:flex bg-[#FAF4EC] p-8 w-1/2 flex-col justify-between border-r border-slate-200/60">
+                <div>
+                  <div className="flex flex-row items-center justify-between gap-3 mb-6">
+                    <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">
+                      Promoción Especial
+                    </span>
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-md bg-white flex items-center justify-center">
+                      <Image src="/bambu-logo.jpg" alt="Bambu Logo" fill className="object-cover" />
+                    </div>
+                  </div>
+                  <h3 className="text-3xl font-bold text-[#9079B5] mb-2">¡Anotate Hoy!</h3>
+                  <p className="text-base text-slate-600 leading-relaxed">
+                    Elegí tu clase de prueba gratis o aprovechá los packs con descuento para empezar a entrenar con nosotras.
+                  </p>
+                </div>
+                <div className="mt-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-200/40">
+                  <p className="text-sm font-semibold text-[#3B9C84]">Beneficio exclusivo</p>
+                  <p className="text-sm text-slate-500 mt-1">Matrícula bonificada por anotarte desde la web hoy mismo.</p>
+                </div>
+              </div>
+
+              {/* Formulario (Ocupa el 100% en celular de forma compacta y el 50% en PC) */}
+              <div className="bg-white p-5 sm:p-8 w-full md:w-1/2 flex flex-col justify-center">
+                <div className="md:hidden mb-4 pr-6">
+                  <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                    Promo Especial
+                  </span>
+                  <h3 className="text-xl font-bold text-[#9079B5] mt-2">¡Anotate Hoy!</h3>
+                </div>
+
+                <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-3 sm:gap-4">
                   <div>
-                    <div className="flex flex-row items-center justify-between gap-2 mb-3 sm:mb-6 pr-8">
-                      <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shrink-0">
-                        Promoción Especial
-                      </span>
-                      <div className="relative w-10 h-10 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-white shadow-md bg-white flex items-center justify-center shrink-0">
-                        <Image src="/bambu-logo.jpg" alt="Bambu Logo" fill className="object-cover" />
-                      </div>
-                    </div>
-                    
-                    <h3 className="text-xl sm:text-2xl font-bold text-[#9079B5] mb-1">¡Anotate Hoy!</h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      Elegí tu clase de prueba gratis o aprovechá los packs con descuento para empezar a entrenar.
-                    </p>
+                    <label className="block text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Tu Nombre</label>
+                    <input 
+                      type="text" 
+                      required
+                      placeholder="Ej. María Pérez"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      className="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
+                    />
                   </div>
-                  <div className="mt-4 sm:mt-6 bg-white p-3 rounded-xl shadow-sm border border-slate-200/40">
-                    <p className="text-[11px] sm:text-xs font-semibold text-[#3B9C84]">Beneficio exclusivo</p>
-                    <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">Matrícula bonificada por anotarte desde la web hoy.</p>
+
+                  <div>
+                    <label className="block text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Teléfono / WhatsApp</label>
+                    <input 
+                      type="tel" 
+                      required
+                      placeholder="Ej. 3511234567"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      className="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
+                    />
                   </div>
-                </div>
 
-                {/* Lado derecho: Formulario */}
-                <div className="bg-white p-4 sm:p-6 md:w-1/2 flex flex-col justify-center">
-                  <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-3">
-                    <div>
-                      <label className="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-slate-500">Tu Nombre</label>
-                      <input 
-                        type="text" 
-                        required
-                        placeholder="Ej. María Pérez"
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-slate-500">Teléfono / WhatsApp</label>
-                      <input 
-                        type="tel" 
-                        required
-                        placeholder="Ej. 3511234567"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-slate-500">Plan / Promo</label>
-                      <select 
-                        value={formData.plan}
-                        onChange={(e) => setFormData({...formData, plan: e.target.value})}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
-                      >
-                        <option value="Clase de prueba gratis">Clase de prueba (¡Gratis!)</option>
-                        <option value="Pack Mensual x2 por semana">Pack Mensual x2 por semana (Oferta)</option>
-                        <option value="Pack Mensual Libre">Pack Mensual Libre (Pase completo)</option>
-                      </select>
-                    </div>
-
-                    <button 
-                      type="submit"
-                      className="mt-2 bg-[#3B9C84] hover:bg-[#31826d] text-white py-3 px-4 rounded-xl font-semibold transition shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                  <div>
+                    <label className="block text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Plan / Promo</label>
+                    <select 
+                      value={formData.plan}
+                      onChange={(e) => setFormData({...formData, plan: e.target.value})}
+                      className="w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
                     >
-                      <span>💬</span> <span>Confirmar y enviar</span>
-                    </button>
-                  </form>
-                </div>
+                      <option value="Clase de prueba gratis">Clase de prueba (¡Gratis!)</option>
+                      <option value="Pack Mensual x2 por semana">Pack Mensual x2 por semana (Oferta)</option>
+                      <option value="Pack Mensual Libre">Pack Mensual Libre (Pase completo)</option>
+                    </select>
+                  </div>
 
+                  <button 
+                    type="submit"
+                    className="mt-2 bg-[#3B9C84] hover:bg-[#31826d] text-white py-3 sm:py-3.5 px-4 rounded-xl font-semibold transition shadow-md text-sm flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>💬</span> <span>Confirmar y enviar</span>
+                  </button>
+                </form>
               </div>
 
             </div>
