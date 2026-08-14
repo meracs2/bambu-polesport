@@ -2,20 +2,57 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+
+type Leaf = {
+  id: number;
+  left: string;
+  width: string;
+  height: string;
+  bg: string;
+  duration: string;
+  delay: string;
+  radius: string;
+  rotation: string;
+};
 
 export default function Home() {
-  const [leaves, setLeaves] = useState<any[]>([]);
-  const [theme, setTheme] = useState<'day' | 'sunset' | 'night'>('day');
+  const leaves = useMemo<Leaf[]>(() => {
+    const rand = (i: number, seed = 1) => ((i * 9301 + 49297 * seed) % 233280) / 233280;
+    return Array.from({ length: 14 }).map((_, i) => {
+      const colors = ['#748F80', '#8EA89B', '#5f776a', '#9ab0a4', '#b2c4bc'];
+      const r1 = rand(i, 1);
+      const r2 = rand(i, 2);
+      const r3 = rand(i, 3);
+      const r4 = rand(i, 4);
+      const r5 = rand(i, 5);
+      return {
+        id: i,
+        left: `${(i * 7) % 95}%`,
+        width: `${Math.floor(r1 * 8) + 16}px`,
+        height: `${Math.floor(r2 * 3) + 6}px`,
+        bg: colors[i % colors.length],
+        duration: `${(r3 * 6 + 10).toFixed(2)}s`,
+        delay: `${(r4 * 8).toFixed(2)}s`,
+        radius: i % 2 === 0 ? '80% 0% 80% 0%' : '0% 80% 0% 80%',
+        rotation: `${Math.floor(r5 * 360)}deg`,
+      } as Leaf;
+    });
+  }, []);
+
+  const [theme, setTheme] = useState<'day' | 'sunset' | 'night'>(() => {
+    try {
+      if (typeof window === 'undefined') return 'day';
+      const stored = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night' | null;
+      return stored && ['day', 'sunset', 'night'].includes(stored) ? stored : 'day';
+    } catch {
+      return 'day';
+    }
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', plan: 'Clase de prueba gratis' });
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night';
-    if (storedTheme && ['day', 'sunset', 'night'].includes(storedTheme)) {
-      setTheme(storedTheme);
-    }
-
     const handleThemeChange = () => {
       const currentTheme = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night';
       if (currentTheme && ['day', 'sunset', 'night'].includes(currentTheme)) {
@@ -27,29 +64,7 @@ export default function Home() {
     return () => window.removeEventListener('theme-change', handleThemeChange);
   }, []);
 
-  const handleThemeChange = (newTheme: 'day' | 'sunset' | 'night') => {
-    setTheme(newTheme);
-    localStorage.setItem('app-theme', newTheme);
-    window.dispatchEvent(new Event('theme-change'));
-  };
-
-  useEffect(() => {
-    const generatedLeaves = Array.from({ length: 14 }).map((_, i) => {
-      const colors = ['#748F80', '#8EA89B', '#5f776a', '#9ab0a4', '#b2c4bc'];
-      return {
-        id: i,
-        left: `${(i * 7) % 95}%`,
-        width: `${Math.floor(Math.random() * 8) + 16}px`,
-        height: `${Math.floor(Math.random() * 3) + 6}px`,
-        bg: colors[i % colors.length],
-        duration: `${Math.random() * 6 + 10}s`,
-        delay: `${Math.random() * 8}s`,
-        radius: i % 2 === 0 ? '80% 0% 80% 0%' : '0% 80% 0% 80%',
-        rotation: `${Math.random() * 360}deg`,
-      };
-    });
-    setLeaves(generatedLeaves);
-  }, []);
+  // theme setter is handled via ThemeProvider or other UI; no local setter needed here
 
   const themeStyles = {
     day: 'bg-white text-slate-900',
@@ -210,7 +225,7 @@ export default function Home() {
         </div>
 
         {/* Imagen Gigante Centrada */}
-        <div className="relative w-full max-w-[380px] sm:max-w-xl md:max-w-2xl h-[400px] sm:h-[550px] flex items-center justify-center z-10">
+        <div className="relative w-full max-w-95 sm:max-w-xl md:max-w-2xl h-100 sm:h-137.5 flex items-center justify-center z-10">
           <Image
             src="/bambu-pole-4.png"
             alt="Bambu Pole Studio Hero"

@@ -11,14 +11,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  const [theme, setTheme] = useState<'day' | 'sunset' | 'night'>('day');
+  const [theme, setTheme] = useState<'day' | 'sunset' | 'night'>(() => {
+    try {
+      if (typeof window === 'undefined') return 'day';
+      const stored = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night' | null;
+      return stored && ['day', 'sunset', 'night'].includes(stored) ? stored : 'day';
+    } catch {
+      return 'day';
+    }
+  });
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night';
-    if (storedTheme && ['day', 'sunset', 'night'].includes(storedTheme)) {
-      setTheme(storedTheme);
-    }
-
     const handleThemeChange = () => {
       const currentTheme = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night';
       if (currentTheme && ['day', 'sunset', 'night'].includes(currentTheme)) {

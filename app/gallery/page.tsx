@@ -1,17 +1,55 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+
+type Leaf = {
+  id: number;
+  left: string;
+  width: string;
+  height: string;
+  bg: string;
+  duration: string;
+  delay: string;
+  radius: string;
+  rotation: string;
+};
 
 export default function GalleryPage() {
-  const [theme, setTheme] = useState<'day' | 'sunset' | 'night'>('day');
-  const [leaves, setLeaves] = useState<any[]>([]);
+  const [theme, setTheme] = useState<'day' | 'sunset' | 'night'>(() => {
+    try {
+      if (typeof window === 'undefined') return 'day';
+      const stored = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night' | null;
+      return stored && ['day', 'sunset', 'night'].includes(stored) ? stored : 'day';
+    } catch {
+      return 'day';
+    }
+  });
+
+  const leaves = useMemo<Leaf[]>(() => {
+    const rand = (i: number, seed = 1) => ((i * 9301 + 49297 * seed) % 233280) / 233280;
+    return Array.from({ length: 18 }).map((_, i) => {
+      const colors = ['#748F80', '#8EA89B', '#5f776a', '#9ab0a4', '#b2c4bc'];
+      const randomColor = colors[i % colors.length];
+      const r1 = rand(i, 1);
+      const r2 = rand(i, 2);
+      const r3 = rand(i, 3);
+      const r4 = rand(i, 4);
+      const r5 = rand(i, 5);
+      return {
+        id: i,
+        left: `${(i * 5.8) % 95}%`,
+        width: `${Math.floor(r1 * 10) + 20}px`,
+        height: `${Math.floor(r2 * 4) + 8}px`,
+        bg: randomColor,
+        duration: `${(r3 * 6 + 10).toFixed(2)}s`,
+        delay: `${(r4 * 8).toFixed(2)}s`,
+        radius: i % 2 === 0 ? '80% 0% 80% 0%' : '0% 80% 0% 80%',
+        rotation: `${Math.floor(r5 * 360)}deg`,
+      } as Leaf;
+    });
+  }, []);
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night';
-    if (storedTheme && ['day', 'sunset', 'night'].includes(storedTheme)) {
-      setTheme(storedTheme);
-    }
-
     const handleThemeChange = () => {
       const currentTheme = localStorage.getItem('app-theme') as 'day' | 'sunset' | 'night';
       if (currentTheme && ['day', 'sunset', 'night'].includes(currentTheme)) {
@@ -21,26 +59,6 @@ export default function GalleryPage() {
 
     window.addEventListener('theme-change', handleThemeChange);
     return () => window.removeEventListener('theme-change', handleThemeChange);
-  }, []);
-
-  useEffect(() => {
-    const generatedLeaves = Array.from({ length: 18 }).map((_, i) => {
-      const colors = ['#748F80', '#8EA89B', '#5f776a', '#9ab0a4', '#b2c4bc'];
-      const randomColor = colors[i % colors.length];
-
-      return {
-        id: i,
-        left: `${(i * 5.8) % 95}%`,
-        width: `${Math.floor(Math.random() * 10) + 20}px`,
-        height: `${Math.floor(Math.random() * 4) + 8}px`,
-        bg: randomColor,
-        duration: `${Math.random() * 6 + 10}s`,
-        delay: `${Math.random() * 8}s`,
-        radius: i % 2 === 0 ? '80% 0% 80% 0%' : '0% 80% 0% 80%',
-        rotation: `${Math.random() * 360}deg`,
-      };
-    });
-    setLeaves(generatedLeaves);
   }, []);
 
   const themeStyles = {
