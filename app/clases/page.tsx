@@ -65,7 +65,7 @@ export default function Home() {
 
   const handleWhatsAppSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const phoneNumber = "TU_NUMERO_DE_TELEFONO"; // Reemplazá con el número real de WhatsApp de la dueña del estudio
+    const phoneNumber = "TU_NUMERO_DE_TELEFONO"; // Reemplazá con el número real de WhatsApp
     const message = `Hola! Me quiero anotar.%0A- Nombre: ${encodeURIComponent(formData.name)}%0A- Teléfono: ${encodeURIComponent(formData.phone)}%0A- Plan/Promo: ${encodeURIComponent(formData.plan)}`;
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
     setIsModalOpen(false);
@@ -76,7 +76,7 @@ export default function Home() {
       {/* HERO: Dibujo gigante centrado y armonizado */}
       <main className="relative min-h-[70vh] sm:min-h-[75vh] flex flex-col justify-center items-center px-6 sm:px-12 lg:px-24 py-12 overflow-hidden">
         
-        {/* --- BOTÓN LLAMADOR (TAMAÑO HEADER, SIN EMOJIS) --- */}
+        {/* --- BOTÓN LLAMADOR --- */}
         <div className="absolute top-6 left-6 z-20 flex items-center">
           <button
             onClick={() => setIsModalOpen(true)}
@@ -86,75 +86,74 @@ export default function Home() {
           </button>
         </div>
 
-        {/* --- MODAL DINÁMICO --- */}
+        {/* --- MODAL REDUCIDO EN CELULARES --- */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="bg-white text-slate-900 rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl border border-slate-100 relative flex flex-col md:flex-row animate-in fade-in zoom-in duration-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4">
+            <div className="bg-white text-slate-900 rounded-2xl sm:rounded-3xl overflow-hidden max-w-lg md:max-w-2xl w-full shadow-2xl border border-slate-100 relative flex flex-col md:flex-row animate-in fade-in zoom-in duration-200 my-auto">
               
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-4 z-10 text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center"
+                className="absolute top-3 right-3 z-10 text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer bg-slate-100 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center"
               >
                 ✕
               </button>
 
-              {/* Lado izquierdo: Logo y Promoción adaptables sin deformarse en celulares */}
-              <div className="bg-[#FAF4EC] p-6 sm:p-8 md:w-1/2 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200/60">
+              {/* Lado izquierdo: Logo y Promoción (más compacto en celular) */}
+              <div className="bg-[#FAF4EC] p-4 sm:p-6 md:w-1/2 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200/60">
                 <div>
-                  {/* Fila alineada y fluida para móviles y PC */}
-                  <div className="flex flex-row items-center justify-between gap-3 mb-6">
-                    <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shrink-0">
+                  <div className="flex flex-row items-center justify-between gap-2 mb-3 sm:mb-6">
+                    <span className="bg-[#3B9C84]/10 text-[#3B9C84] text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shrink-0">
                       Promoción Especial
                     </span>
-                    <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-white shadow-md bg-white flex items-center justify-center shrink-0">
+                    <div className="relative w-10 h-10 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-white shadow-md bg-white flex items-center justify-center shrink-0">
                       <Image src="/bambu-logo.jpg" alt="Bambu Logo" fill className="object-cover" />
                     </div>
                   </div>
                   
-                  <h3 className="text-2xl sm:text-3xl font-bold text-[#9079B5] mb-2">¡Anotate Hoy!</h3>
-                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                    Elegí tu clase de prueba gratis o aprovechá los packs con descuento para empezar a entrenar con nosotras.
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#9079B5] mb-1">¡Anotate Hoy!</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    Elegí tu clase de prueba gratis o aprovechá los packs con descuento para empezar a entrenar.
                   </p>
                 </div>
-                <div className="mt-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-200/40">
-                  <p className="text-xs sm:text-sm font-semibold text-[#3B9C84]">Beneficio exclusivo</p>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1">Matrícula bonificada por anotarte desde la web hoy mismo.</p>
+                <div className="mt-4 sm:mt-6 bg-white p-3 rounded-xl shadow-sm border border-slate-200/40">
+                  <p className="text-[11px] sm:text-xs font-semibold text-[#3B9C84]">Beneficio exclusivo</p>
+                  <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">Matrícula bonificada por anotarte desde la web hoy.</p>
                 </div>
               </div>
 
-              {/* Lado derecho: Formulario */}
-              <div className="bg-white p-6 sm:p-8 md:w-1/2 flex flex-col justify-center">
-                <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-4">
+              {/* Lado derecho: Formulario compacto */}
+              <div className="bg-white p-4 sm:p-6 md:w-1/2 flex flex-col justify-center">
+                <form onSubmit={handleWhatsAppSubmit} className="flex flex-col gap-3">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Tu Nombre</label>
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-slate-500">Tu Nombre</label>
                     <input 
                       type="text" 
                       required
                       placeholder="Ej. María Pérez"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Teléfono / WhatsApp</label>
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-slate-500">Teléfono / WhatsApp</label>
                     <input 
                       type="tel" 
                       required
                       placeholder="Ej. 3511234567"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-slate-500">Seleccioná tu Promo / Plan</label>
+                    <label className="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-slate-500">Plan / Promo</label>
                     <select 
                       value={formData.plan}
                       onChange={(e) => setFormData({...formData, plan: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm focus:outline-none focus:border-[#3B9C84]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-[#3B9C84]"
                     >
                       <option value="Clase de prueba gratis">Clase de prueba (¡Gratis!)</option>
                       <option value="Pack Mensual x2 por semana">Pack Mensual x2 por semana (Oferta)</option>
@@ -164,7 +163,7 @@ export default function Home() {
 
                   <button 
                     type="submit"
-                    className="mt-3 bg-[#3B9C84] hover:bg-[#31826d] text-white py-3.5 px-4 rounded-xl font-semibold transition shadow-md text-sm sm:text-base flex items-center justify-center gap-2.5 cursor-pointer"
+                    className="mt-2 bg-[#3B9C84] hover:bg-[#31826d] text-white py-3 px-4 rounded-xl font-semibold transition shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>💬</span> <span>Confirmar y enviar</span>
                   </button>
@@ -204,7 +203,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Imagen Gigante Armonizada (Altura contenida en celulares: h-[320px] y más grande en PC: sm:h-[520px]) */}
+        {/* Imagen Gigante Armonizada */}
         <div className="relative w-full max-w-[280px] sm:max-w-xl md:max-w-2xl h-[320px] sm:h-[520px] flex items-center justify-center z-10 mt-6 sm:mt-0">
           <Image
             src="/bambu-pole-4.png"
